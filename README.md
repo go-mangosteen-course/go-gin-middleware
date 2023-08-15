@@ -1,5 +1,12 @@
 课程链接：https://xiedaimala.com/tasks/4928e263-c37f-42a1-8494-ba01c752facf
 
+# 创建配置文件
+
+```bash
+touch ~/.config/mangosteen/config.json
+```
+文件内容从 `config.json.example` 里复制过去
+
 # 启动本地数据库
 
 ## psql
@@ -19,6 +26,9 @@ docker run -d --network=network1 --name mysql-for-go-mangosteen -e MYSQL_DATABAS
 
 ```bash
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+go install github.com/mailhog/MailHog@latest
+go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+
 ```
 
 ## 创建迁移文件
@@ -36,12 +46,19 @@ go build . && ./mangosteen db migrate
 migrate -database "postgres://mangosteen:123456@pg-for-go-mangosteen:5432/mangosteen_dev?sslmode=disable" -source "file://$(pwd)/config/migrations" up
 ```
 
-## 回滚迁移文件
+## 回滚迁移文件(可选)
 
 ```bash
 go build . && ./mangosteen db migrate:down
 # 或者
 migrate -database "postgres://mangosteen:123456@pg-for-go-mangosteen:5432/mangosteen_dev?sslmode=disable" -source "file://$(pwd)/config/migrations" down 1
+```
+
+# 生成文档
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@latest
+swag init
 ```
 
 # 测试
@@ -51,3 +68,5 @@ migrate -database "postgres://mangosteen:123456@pg-for-go-mangosteen:5432/mangos
 ```bash
 go install github.com/mailhog/MailHog@v1.0.1 && MailHog
 ```
+
+
